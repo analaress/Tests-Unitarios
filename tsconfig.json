@@ -1,15 +1,17 @@
 {
   "compilerOptions": {
-      "target": "es6",                          
-      "module": "commonjs",                    
-      "lib": ["es6"],                     
-      "allowJs": true,
-      "outDir": "build",
-      "rootDirs": ["./src", "__tests__"],
-      "strict": true,
-      "noImplicitAny": true,
-      "esModuleInterop": true,
-      "types": ["node", "jest"],
-      "resolveJsonModule": true
-    }
-  }
+    "target": "es6",
+    "module": "commonjs",
+    "lib": ["es6"],
+    "allowJs": true,
+    "outDir": "build",
+    "rootDir": "src",
+    "strict": true,
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "types": ["node", "jest"],
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "build", "dist", "__tests__"]
+}
