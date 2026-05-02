@@ -26,6 +26,40 @@ Eles cobrem os seguintes endpoints:
 
 Tambem foram adicionados testes para cenarios de erro, como usuario nao encontrado, falha ao criar usuario e falha ao excluir usuario.
 
+## Caminhos testados por rota
+
+### `GET /users`
+
+- Caminho feliz: retorna uma lista de usuarios com status `200`.
+- Caminho de erro: retorna `500` quando o repositorio falha ao listar usuarios.
+- Regra de negocio: calcula o campo `isOfAge` para cada usuario.
+- Cenarios de idade testados:
+  - idade menor que 18: `isOfAge` deve ser `false`
+  - idade igual a 18: `isOfAge` deve ser `true`
+  - idade maior que 18: `isOfAge` deve ser `true`
+
+### `GET /users/:id`
+
+- Caminho feliz: retorna um usuario existente com status `200`.
+- Caminho de erro: retorna `404` quando o usuario nao existe.
+- Regra de negocio: calcula o campo `isOfAge` para o usuario encontrado.
+- Cenarios de idade testados:
+  - idade menor que 18: `isOfAge` deve ser `false`
+  - idade igual a 18: `isOfAge` deve ser `true`
+  - idade maior que 18: `isOfAge` deve ser `true`
+
+### `POST /users`
+
+- Caminho feliz: retorna `201` quando o usuario e criado com sucesso.
+- Caminho de erro: retorna `500` quando o repositorio informa falha na criacao.
+- Regra testada: o body da requisicao e enviado corretamente para o metodo `save`.
+
+### `DELETE /users/:id`
+
+- Caminho feliz: retorna `200` quando o usuario e excluido com sucesso.
+- Caminho de erro: retorna `500` quando o repositorio informa falha na exclusao.
+- Regra testada: o id recebido pela rota e convertido para numero e enviado corretamente para o metodo `delete`.
+
 ## Como os mocks funcionam
 
 Nos testes, os metodos do `UserRepository` sao substituidos por retornos controlados usando `jest.spyOn`.
@@ -54,7 +88,7 @@ Resultado esperado:
 
 ```text
 Test Suites: 1 passed, 1 total
-Tests:       7 passed, 7 total
+Tests:       11 passed, 11 total
 ```
 
 ## Como gerar cobertura de testes

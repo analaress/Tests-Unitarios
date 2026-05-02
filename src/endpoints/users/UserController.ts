@@ -5,20 +5,27 @@ import { IUser } from '../../interfaces/IUser';
 
 export class UserController {
   public list(req: Request, res: Response): void {
-    const users = new UserRepository().list();
-    const usersResponse: IUserResponse[] = [];
+    try {
+      const users = new UserRepository().list();
+      const usersResponse: IUserResponse[] = [];
 
-    users.forEach((user: IUser) => {
-      usersResponse.push({
-        ...user,
-        isOfAge: user.age >= 18,
+      users.forEach((user: IUser) => {
+        usersResponse.push({
+          ...user,
+          isOfAge: user.age >= 18,
+        });
       });
-    });
 
-    res.status(200).json({
-      success: true,
-      data: usersResponse,
-    });
+      res.status(200).json({
+        success: true,
+        data: usersResponse,
+      });
+    } catch {
+      res.status(500).json({
+        success: false,
+        data: 'Falha ao listar os usuários',
+      });
+    }
   }
 
   public getOne(req: Request, res: Response): void {

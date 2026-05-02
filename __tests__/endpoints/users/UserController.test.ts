@@ -61,6 +61,20 @@ describe('UserController', () => {
     expect(response.body.data).toEqual(expectedUsers);
   });
 
+  it('Deve retornar erro quando a listagem de usuários falhar', async () => {
+    jest.spyOn(UserRepository.prototype, 'list').mockImplementationOnce(() => {
+      throw new Error('Erro ao listar usuários');
+    });
+
+    const response = await request(app).get('/users');
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      success: false,
+      data: 'Falha ao listar os usuários',
+    });
+  });
+
   it('Deve retornar um usuário pelo id corretamente', async () => {
     const mockUser: IUser = {
       id: 2,
@@ -78,6 +92,31 @@ describe('UserController', () => {
     const response = await request(app).get('/users/2');
 
     expect(findOneSpy).toHaveBeenCalledWith(2);
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.data).toEqual(expectedUser);
+  });
+
+  it.each([
+    { age: 17, isOfAge: false },
+    { age: 18, isOfAge: true },
+    { age: 19, isOfAge: true },
+  ])('Deve calcular isOfAge como $isOfAge quando a idade for $age', async ({ age, isOfAge }) => {
+    const mockUser: IUser = {
+      id: 1,
+      name: 'Usuario Teste',
+      age,
+    };
+
+    const expectedUser: IUserResponse = {
+      ...mockUser,
+      isOfAge,
+    };
+
+    jest.spyOn(UserRepository.prototype, 'findOne').mockReturnValueOnce(mockUser);
+
+    const response = await request(app).get('/users/1');
+
     expect(response.status).toBe(200);
     expect(response.body.success).toBe(true);
     expect(response.body.data).toEqual(expectedUser);
