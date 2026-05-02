@@ -1,13 +1,18 @@
 import request from 'supertest';
+import { Application } from 'express';
 import { App } from '../../../src/app';
 import { IUser } from '../../../src/interfaces/IUser';
 import { IUserResponse } from '../../../src/interfaces/IUserResponse';
 import { UserRepository } from '../../../src/endpoints/users/userRepository';
 
-// Cria uma instância da aplicação para executar os testes
-const app = new App().server;
-
 describe('UserController', () => {
+  let app: Application;
+
+  beforeEach(() => {
+    jest.restoreAllMocks();
+    app = new App().server;
+  });
+
   it('Deve retornar a lista de usuários corretamente', async () => {
     const mockUsers: IUser[] = [
       {
